@@ -13,8 +13,11 @@
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <!--para  -->
+    <link href="/Content/sweetalert.css" rel="stylesheet" />
+    <script src="/Scripts/sweetalert.min.js"></script>
 
 </head>
 <body>
@@ -39,6 +42,11 @@
             </Scripts>
         </asp:ScriptManager>
 
+         <link href="/Content/jquery.datetimepicker.css" rel="stylesheet" />
+        <script src="/Scripts/moment-with-locales.js"></script>
+        <script src="/Scripts/jquery.datetimepicker.full.min.js"></script>
+
+
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -47,13 +55,39 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="~/">Nombre de la aplicación</a>
+                    <a class="navbar-brand" runat="server" href="~/">LavanderiaLeo</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/">Inicio</a></li>
                         <li><a runat="server" href="~/About">Acerca de</a></li>
                         <li><a runat="server" href="~/Contact">Contacto</a></li>
+
+                         <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">catalogos <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/Catalogos/Clientes/ListadoClientesLa.aspx">Listado Clientes</a>
+                                </li>
+                                <li>
+                                    <a href="/Catalogos/Clientes/AltaCliente.aspx">Alta Clientes</a>
+                                </li>
+                                <li>
+                                    <a href="/Catalogos/Camiones/ListadoCamiones.aspx">Listado camiones</a>
+                                </li>
+                                <li>
+                                    <a href="/Catalogos/Camiones/AltaCamiones.aspx">Alta camiones</a>
+                                </li>
+                                <li>
+                                    <a href="/Catalogos/Ruta/ListadoRuta.aspx">Listado ruta</a>
+                                </li>
+                                <li>
+                                    <a href="/Catalogos/Ruta/AltaRuta.aspx">Alta ruta</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
                     </ul>
                 </div>
             </div>
