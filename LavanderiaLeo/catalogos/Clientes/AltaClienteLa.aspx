@@ -5,20 +5,20 @@
      <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h3>Registro de chofer 
+                <h3>Registro de clientes 
                 </h3>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="form-grup">
+                <div class="form-group">
                     <label for="<%=txtNombre.ClientID%>">Nombre</label>
                     <asp:TextBox ID="txtNombre" placeholder="Nombre completo" CssClass="form-cotrol" runat="server" MaxLength="150"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="RequiedFieldValidator1" ControlToValidate="txtNombre" CssClass="text-danger" runat="server" ErrorMessage="Nombre de cliente"></asp:RequiredFieldValidator>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="form-grup">
+                <div class="form-group">
                     <label for="<%=txtApPaterno.ClientID%>">Apellido Parterno</label>
                     <asp:TextBox ID="txtApPaterno" placeholder="Apellido Paterno" CssClass="form-cotrol" runat="server" MaxLength="150"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ControlToValidate="txtApPaterno" CssClass="text-danger" runat="server" ErrorMessage="Apellido Paterno"></asp:RequiredFieldValidator>

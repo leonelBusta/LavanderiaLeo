@@ -26,18 +26,18 @@ namespace LavanderiaLeo.VO
         public EmpleadosLaVO()
         {
             Id = 0;
-            Nombre = "";
-            Apellido = "";
-            Puesto = "";
-            Telefono = "";
-            UrlFoto = "";
+            Nombre = String.Empty;
+            Apellido = String.Empty;
+            Puesto = String.Empty;
+            Telefono = String.Empty;
+            UrlFoto = String.Empty;
         }
         public EmpleadosLaVO(DataRow dr)
         {
-            Id = int.Parse(dr["id"].ToString());
+            Id = int.Parse(dr["Id"].ToString());
             Nombre = dr["Nombre"].ToString();
-            Apellido = dr["ApPaterno"].ToString();
-            Puesto = dr["ApMaterno"].ToString();
+            Apellido = dr["Apellido"].ToString();
+            Puesto = dr["Puesto"].ToString();
             Telefono = dr["Telefono"].ToString();
             UrlFoto = dr["UrlFoto"].ToString();
         }

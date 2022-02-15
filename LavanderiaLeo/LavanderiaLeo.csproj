@@ -112,6 +112,7 @@
     <Content Include="catalogos\Clientes\AltaClienteLa.aspx" />
     <Content Include="catalogos\Clientes\EdicionClienteLa.aspx" />
     <Content Include="catalogos\Clientes\ListadoClientesLa.aspx" />
+    <Content Include="catalogos\Empleados\AltaEmpleadosLa.aspx" />
     <Content Include="catalogos\Empleados\ListadoEmpledosLa.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -213,6 +214,13 @@
     </Compile>
     <Compile Include="catalogos\Clientes\ListadoClientesLa.aspx.designer.cs">
       <DependentUpon>ListadoClientesLa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="catalogos\Empleados\AltaEmpleadosLa.aspx.cs">
+      <DependentUpon>AltaEmpleadosLa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="catalogos\Empleados\AltaEmpleadosLa.aspx.designer.cs">
+      <DependentUpon>AltaEmpleadosLa.aspx</DependentUpon>
     </Compile>
     <Compile Include="catalogos\Empleados\ListadoEmpledosLa.aspx.cs">
       <DependentUpon>ListadoEmpledosLa.aspx</DependentUpon>

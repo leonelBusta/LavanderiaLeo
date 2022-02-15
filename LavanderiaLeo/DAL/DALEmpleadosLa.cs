@@ -84,7 +84,7 @@ namespace LavanderiaLeo.DAL
         {
             try
             {
-                string Query = "Empleados_Insertar";
+                string Query = "Empleados_Actualizar";
                 SqlCommand cmd = new SqlCommand(Query, conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -107,5 +107,62 @@ namespace LavanderiaLeo.DAL
             finally { conn.Close(); }
         }
 
-    }
+        //eliminar
+        public static void DelEmpleado(int id)
+        {
+            try
+            {
+                string Query = "Empleados_Eliminar";
+                SqlCommand cmd = new SqlCommand(Query, conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally { conn.Close(); }
+        }
+
+        //getbyid
+        public static EmpleadosLaVO GetEmpleadosLaById(int id)
+        {
+            try
+            {
+                string Query = "Empleados_GetByID";
+                SqlCommand cmd = new SqlCommand(Query, conn);
+                cmd.Connection = conn;
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id", id);
+                DataSet dsEmpleado = new DataSet();
+                adapter.Fill(dsEmpleado);
+                if(dsEmpleado.Tables[0].Rows.Count > 0)
+                {
+                    //encotro un regristro
+                    DataRow dr = dsEmpleado.Tables[0].Rows[0];
+                    EmpleadosLaVO empleado = new EmpleadosLaVO(dr);
+                    return empleado;
+                }
+                else
+                {
+                    //la tabla esta vacia
+                    EmpleadosLaVO empleado = new EmpleadosLaVO();
+                    return empleado;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
+    }//end class
 }

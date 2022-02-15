@@ -43,8 +43,8 @@
                         TargetControlID="txtTelefono"
                         Mask="(999) 999-9999"
                         ClearMaskOnLostFocus="false"
-                        runat="server"
                         >
+                        runat="server"
                     </AjaxToolkit:MaskedEditExtender>
                 </div>
             </div>

@@ -2,14 +2,14 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     
- <div class="container">
+    <div class="container">
      <div class="row">
           <div class="col-md-10 col-md-offset-1" style="scroll-margin-left: 40px;">
              <h3>Listado de Empleados</h3>
 
              
-             <asp:GridView ID="GVEmpleadosLa" runat="server" CssClass="table table-bordered table-striped table-condensed" DataKeyNames="Id" AutoGenerateColumns="False" OnSelectedIndexChanged="GVClientesLA_SelectedIndexChanged"
-                 OnRowCommand="GVClientesLA_RowCommand" OnRowEditing="GVClientesLA_RowEditing" OnRowUpdating="GVClientesLA_RowUpdating" OnRowDeleting="GVClientesLA_RowDeleting" OnRowCancelingEdit="GVClientesLA_RowCancelingEdit">
+             <asp:GridView ID="GVEmpleadosLa" runat="server" CssClass="table table-bordered table-striped table-condensed" DataKeyNames="Id" AutoGenerateColumns="False" OnSelectedIndexChanged="GVEmpleadosLa_SelectedIndexChanged"
+                 OnRowCommand="GVEmpleadosLa_RowCommand" OnRowEditing="GVEmpleadosLa_RowEditing" OnRowUpdating="GVEmpleadosLa_RowUpdating" OnRowDeleting="GVEmpleadosLa_RowDeleting"     OnRowCancelingEdit="GVEmpleadosLa_RowCancelingEdit">
                  <Columns>
 
                      <asp:ButtonField ButtonType="Button" CommandName="Select" Text="Seleccionar">
@@ -40,7 +40,7 @@
                      <ItemStyle Width="100px" />
                      </asp:BoundField>
                   
-                     <asp:ImageField HeaderText="Foto" ReadOnly="True">
+                     <asp:ImageField DataImageUrlField="UrlFoto" HeaderText="Foto" ReadOnly="True">
                          <ControlStyle Height="90px" Width="120px" />
                          <ItemStyle Width="120px" />
                      </asp:ImageField>
