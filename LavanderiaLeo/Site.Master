@@ -70,10 +70,10 @@
                                     <a href="/Catalogos/Clientes/ListadoClientesLa.aspx">Listado Clientes</a>
                                 </li>
                                 <li>
-                                    <a href="/Catalogos/Clientes/AltaCliente.aspx">Alta Clientes</a>
+                                    <a href="/Catalogos/Clientes/AltaClienteLa.aspx">Alta Clientes</a>
                                 </li>
                                 <li>
-                                    <a href="/Catalogos/Camiones/ListadoCamiones.aspx">Listado camiones</a>
+                                    <a href="/Catalogos/Clientes/ListadoEmpleadosLa.aspx">Listado camiones</a>
                                 </li>
                                 <li>
                                     <a href="/Catalogos/Camiones/AltaCamiones.aspx">Alta camiones</a>

@@ -74,7 +74,7 @@ namespace LavanderiaLeo.BILL
                 return "Cliente eliminado";
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;

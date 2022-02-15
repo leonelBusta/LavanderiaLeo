@@ -112,6 +112,7 @@
     <Content Include="catalogos\Clientes\AltaClienteLa.aspx" />
     <Content Include="catalogos\Clientes\EdicionClienteLa.aspx" />
     <Content Include="catalogos\Clientes\ListadoClientesLa.aspx" />
+    <Content Include="catalogos\Empleados\ListadoEmpledosLa.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -191,6 +192,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BLL\BLLClientesLa.cs" />
+    <Compile Include="BLL\BLLEmpleadosLa.cs" />
     <Compile Include="catalogos\Clientes\AltaClienteLa.aspx.cs">
       <DependentUpon>AltaClienteLa.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -212,6 +214,13 @@
     <Compile Include="catalogos\Clientes\ListadoClientesLa.aspx.designer.cs">
       <DependentUpon>ListadoClientesLa.aspx</DependentUpon>
     </Compile>
+    <Compile Include="catalogos\Empleados\ListadoEmpledosLa.aspx.cs">
+      <DependentUpon>ListadoEmpledosLa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="catalogos\Empleados\ListadoEmpledosLa.aspx.designer.cs">
+      <DependentUpon>ListadoEmpledosLa.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -220,6 +229,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="DAL\DALClienteLa.cs" />
+    <Compile Include="DAL\DALEmpleadosLa.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -255,10 +265,10 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
     <Compile Include="VO\ClientesLaVO.cs" />
+    <Compile Include="VO\EmpleadosLaVO.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="catalogos\Empleados\" />
     <Folder Include="catalogos\Prendas\" />
     <Folder Include="catalogos\Servicios\" />
     <Folder Include="catalogos\ventas\" />
