@@ -6,9 +6,6 @@
          <div class="col-md-10-col-md-offset-1">
              <h3>Listado de Clientes</h3>
 
-             sdsd
-
-
              
              <asp:GridView ID="GVClientesLA" runat="server" CssClass="table table-bordered table-striped table-condensed" DataKeyNames="Id" AutoGenerateColumns="False" OnSelectedIndexChanged="GVClientesLA_SelectedIndexChanged"
                  OnRowCommand="GVClientesLA_RowCommand" OnRowEditing="GVClientesLA_RowEditing" OnRowUpdating="GVClientesLA_RowUpdating" OnRowDeleting="GVClientesLA_RowDeleting" OnRowCancelingEdit="GVClientesLA_RowCancelingEdit">

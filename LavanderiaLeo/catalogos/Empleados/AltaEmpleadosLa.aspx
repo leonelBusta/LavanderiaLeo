@@ -27,7 +27,7 @@
 
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="<%=txtPuesto.ClientID %>">Puestp</label>
+                    <label for="<%=txtPuesto.ClientID %>">Puesto</label>
                     <asp:TextBox ID="txtPuesto" placeholder="Apellido" CssClass="form-control" runat="server" MaxLength="150"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="txtPuesto" CssClass="text-danger" runat="server" ErrorMessage="Puesto"></asp:RequiredFieldValidator>
                 </div>

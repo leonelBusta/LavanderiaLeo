@@ -1,5 +1,6 @@
 ﻿using Gen2_3capas.Util;
 using LavanderiaLeo.BLL;
+using LavanderiaLeo.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +81,8 @@ namespace LavanderiaLeo.catalogos.Empleados
         {
             string Id = GVEmpleadosLa.DataKeys[e.RowIndex].Values["Id"].ToString();
             string resultado = BLLEmpleadosLa.DelEmpleado(int.Parse(Id));
-            if (resultado == "Empleado eliminado")
+
+            if (resultado == "Empleado Eliminado")
             {
                 UtilControls.SweetBox("Empleado eliminado con exito", "", "success", this.Page, this.GetType());
                 RefrescaGrid();

@@ -1,7 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EdicionClienteLa.aspx.cs" Inherits="LavanderiaLeo.catalogos.Clientes.EdicionClienteLa" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EdicionEmpleadoLa.aspx.cs" Inherits="LavanderiaLeo.catalogos.Empleados.EdicionEmpleadoLa" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
 
     <div class="container">
         <div class="row">
@@ -32,6 +30,16 @@
                   
                 </div>
             </div>
+
+             <div class="col-md-12">
+                <div class="form-grup">
+                    <label for="<%=txtPuesto.ClientID%>">Puesto</label>
+                    <asp:TextBox ID="txtPuesto" CssClass="form-cotrol" runat="server" MaxLength="10"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ControlToValidate="txtPuesto" CssClass="text-danger" runat="server" ErrorMessage="Puesto de cliente"></asp:RequiredFieldValidator>
+                        <!--  --aca vamos a colocar una mascara---  --->
+                  
+                </div>
+            </div>
              <div class="col-md-12">
                 <div class="form-grup">
                     <label for="<%=txtTelefono.ClientID%>">Telefono</label>
@@ -48,7 +56,29 @@
                     </AjaxToolkit:MaskedEditExtender>
                 </div>
             </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                    <label for="<%=SubeImagen.ClientID%>">Selecciona Foto</label>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="file" id="SubeImagen"
+                                class="btn btn-file" runat="server" />
+                        </div>
+                        <div class="col-md-9">
+                            <asp:Button ID="btnSubeImagen" CssClass="btn btn-primary"
+                                runat="server" Text="Subir" OnClick="btnSubeImagen_Click" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Foto</label>
+                    <asp:Image ID ="imgFotoEmpleado" width="150" Height="100" runat="server"></asp:Image>
+                    <label id="urlFoto" runat="server"></label>
+                </div>
+            </div>
 
             <div class="col-md-12 col-md-offset-5">
                 <div class="form-group">
@@ -61,14 +91,4 @@
         </div>
     </div>
 
-   <!-- <script>
-        $(document).ready(function () {
-            //declarar al time picker en el eeanol con memnete
-            $.datetimepicker.setLocale('es');
-            //asigamos el calendro a los inpit
-            $("#<% // =fechaNacimiento.ClientID %>").datetimepicker({
-                format: 'd/m/Y'
-            });
-        });
-    </script>  --->
 </asp:Content>

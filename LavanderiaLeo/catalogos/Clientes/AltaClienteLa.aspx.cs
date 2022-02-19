@@ -1,5 +1,6 @@
 ﻿using Gen2_3capas.Util;
 using LavanderiaLeo.BILL;
+using LavanderiaLeo.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;

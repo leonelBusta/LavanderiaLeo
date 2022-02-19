@@ -1,5 +1,6 @@
 ﻿using Gen2_3capas.Util;
 using LavanderiaLeo.BILL;
+using LavanderiaLeo.Util;
 using LavanderiaLeo.VO;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace LavanderiaLeo.catalogos.Clientes
                 ClientesLaVO cliente = BLLClientesLa.GetClienteById(Id);
                 if (cliente.Id == 0)
                 {
-                    UtilControls.SweetBoxConfirm("Error", "el chofer no se encuentra en la base de datos", "warning ", "ListadoClientesLa.aspx", this.Page, this.GetType());
+                    UtilControls.SweetBoxConfirm("Error", "el cliente no se encuentra en la base de datos", "warning ", "ListadoClientesLa.aspx", this.Page, this.GetType());
                 }
                 txtNombre.Text = cliente.Nombre;
                 txtApellido.Text = cliente.Apellido;

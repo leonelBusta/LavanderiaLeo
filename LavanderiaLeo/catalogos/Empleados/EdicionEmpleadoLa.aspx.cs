@@ -1,6 +1,7 @@
 ﻿using Gen2_3capas.Util;
 using LavanderiaLeo.BLL;
 using LavanderiaLeo.Util;
+using LavanderiaLeo.VO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,11 +12,27 @@ using System.Web.UI.WebControls;
 
 namespace LavanderiaLeo.catalogos.Empleados
 {
-    public partial class AltaEmpleadosLa : System.Web.UI.Page
+    public partial class EdicionEmpleadoLa : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                if (Request.QueryString["Id"] == null)
+                {
+                    Response.Redirect("ListadoEmpledosLa.aspx");
+                }
+                int Id = int.Parse(Request.QueryString["Id"]);
+                EmpleadosLaVO empleado = BLLEmpleadosLa.GetEmpleadosLaById(Id);
+                if(empleado.Id == 0)
+                {
+                    UtilControls.SweetBoxConfirm("Error", "El empleado no se encuentra en la base de datos", "Warning", "ListadoEmpledosLa.aspx", this.Page, this.GetType());
+                }
+                txtNombre.Text = empleado.Nombre;
+                txtApellido.Text = empleado.Apellido;
+                txtPuesto.Text = empleado.Puesto;
+                txtTelefono.Text = empleado.Telefono;
+            }
         }
 
         protected void btnSubeImagen_Click(object sender, EventArgs e)
@@ -39,7 +56,7 @@ namespace LavanderiaLeo.catalogos.Empleados
                 {
                     //verificar que el directorio donde vamos 
                     string pahDir =
-                        Server.MapPath("~/Imagenes/Empleado/");
+                        Server.MapPath("~/Imagenes/Empleados/");
                     if (!Directory.Exists(pahDir))
                     {
                         //crea el arbol coplre
@@ -47,9 +64,9 @@ namespace LavanderiaLeo.catalogos.Empleados
                     }
                     //guarda la imagen en el direccitorioo
                     SubeImagen.PostedFile.SaveAs(pahDir + FileName);
-                    string UrlFoto = "/Imagenes/Empleado/" + FileName;
-                    urlFoto.InnerText = UrlFoto;
-                    imgFotoEmpleado.ImageUrl = UrlFoto;
+                    string urlfoto = "/Imagenes/Empleados/" + FileName;
+                    urlFoto.InnerText = urlfoto;
+                    imgFotoEmpleado.ImageUrl = urlfoto;
                     btnGuardar.Visible = true;
                 }
             }
@@ -71,14 +88,16 @@ namespace LavanderiaLeo.catalogos.Empleados
                 string Telefono = txtTelefono.Text;
                 string UrlFoto = imgFotoEmpleado.ImageUrl;
 
-                BLLEmpleadosLa.insEmpleado(Nombre, Apellido, Puesto, Telefono, UrlFoto);
+                int id = int.Parse(Request.QueryString["Id"].ToString());
 
-                UtilControls.SweetBoxConfirm("Exito!", "Empleado Agregado", "success", "ListadoEmpledosLa.aspx", this.Page, this.GetType());
+                BLLEmpleadosLa.UpdEmpleado(Nombre, Apellido, Puesto , Telefono, UrlFoto, id);
 
+                UtilControls.SweetBoxConfirm("Exito", "Empleado actualizado", "success", "ListadoEmpledosLa.aspx", this.Page, this.GetType());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                UtilControls.SweetBox("Error!", ex.ToString(), "error", this.Page, this.GetType());
+
+                UtilControls.SweetBox("Error", ex.Message, "Error", this.Page, this.GetType());
             }
         }
     }

@@ -79,10 +79,7 @@
                                     <a href="/Catalogos/Empleados/AltaEmpleadosLa.aspx">Alta Empleados</a>
                                 </li>
                                 <li>
-                                    <a href="/Catalogos/Ruta/ListadoRuta.aspx">Listado ruta</a>
-                                </li>
-                                <li>
-                                    <a href="/Catalogos/Ruta/AltaRuta.aspx">Alta ruta</a>
+                                    <a href="/Catalogos/Ventas/AltaVentasLa.aspx">Alta ventas</a>
                                 </li>
                             </ul>
                         </li>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -10,171 +12,168 @@ using System.Web.UI.WebControls;
 
 namespace Gen2_3capas.Util
 {
-    public class UtilControls
+    public class DBConnection
     {
-        public static void FillDropDownList(DropDownList ddl, string valueField, string textField, object datasource)
+        private String _StringDeConexion;
+
+        public string StringDeConcexion { get => _StringDeConexion; set => _StringDeConexion = value; }
+
+        public DBConnection(String cnxnString)
         {
-            ddl.DataValueField = valueField;
-            ddl.DataTextField = textField;
-            ddl.DataSource = datasource;
-            ddl.DataBind();
+            this._StringDeConexion = cnxnString;
+        }
+        public static string connectionString = ConfigurationManager.ConnectionStrings["Conn"] != null ? ConfigurationManager.ConnectionStrings["Conn"].ConnectionString : "";
+        public static DataSet ExecuteQuery(SqlConnection conn, SqlTransaction tran, string spName, out int retValue, params object[] parametros)
+        {
+            if (parametros != null && parametros.Length % 2 != 0)
+                throw new Exception("Los parametros deben de venir en pares");
+
+            SqlCommand comm = DBConnection.fillSqlCommand_Parameters(spName, parametros);
+            comm.Connection = conn;
+            if (tran != null)
+                comm.Transaction = tran;
+            SqlDataAdapter adapter = new SqlDataAdapter(comm);
+            DataSet ds = new DataSet();
+            adapter.Fill(ds); //aca exactamente ejecutas la consulta
+            retValue = comm.Parameters["RetVal"].Value != null ? (int)comm.Parameters["RetVal"].Value : 0;
+            return ds;
         }
 
-        public static void FillDropDownList(DropDownList ddlObj, string sValue, string sTexto, Object dsDatos, string sValuePre, string sTextoPre)
+        public static long ExecuteNonQueryGetIdentity(SqlConnection conn, SqlTransaction tran, string spName, params object[] parametros)
         {
-            FillDropDownList(ddlObj, sValue, sTexto, dsDatos);
-            ListItem liAux = new ListItem();
-            liAux.Value = sValuePre;
-            liAux.Text = sTextoPre;
-            //FillDropDownList(ddlObj, sValue, sTexto, dsDatos);
-            ddlObj.Items.Insert(0, liAux);
-            //if (!(ddlObj.Items.FindByValue(sPreValue) == null))
-            //    ddlObj.Items.FindByValue(sPreValue).Selected = true;
+            if (parametros != null && parametros.Length % 2 != 0)
+                throw new Exception("Los parametros deben de venir en pares");
+            SqlCommand comm = DBConnection.fillSqlCommand_Parameters(spName, parametros);
+            comm.Connection = conn;
+            if (tran != null)
+                comm.Transaction = tran;
+            object objReturn = comm.ExecuteScalar();
+            comm = conn.CreateCommand();
+            comm.Transaction = tran;
+            comm.CommandText = "SELECT @@IDENTITY";
+            object val = comm.ExecuteScalar();
+            long identity = long.Parse(val.ToString());
+            comm.Dispose();
+            return identity;
+        }
+        public static long ExecuteNonQueryGetIdentity(string spName, params object[] parametros)
+        {
+            return ExecuteGetIdentityWithStrCon(DBConnection.connectionString, spName, parametros);
+        }
+        public static long ExecuteGetIdentityWithStrCon(string stringDeConexion, string spName, params object[] parametros)
+        {
+            SqlConnection conn = new SqlConnection(stringDeConexion);
+            conn.Open();
+            long identity = ExecuteNonQueryGetIdentity(conn, null, spName, parametros);
+            conn.Close();
+            return identity;
+        }
+        public static DataSet ExecuteGetIdentityWithStrCon(string stringDeConexion, string spName, out int retValue, params object[] parametros)
+        {
+            SqlConnection conn = new SqlConnection(stringDeConexion);
+            conn.Open();
+            DataSet ds = ExecuteQuery(conn, null, spName, out retValue, parametros);
+            conn.Close();
+            return ds;
+        }
+        public static DataSet ExecuteDataset(string spName, out int retValue, params object[] parametros)
+        {
+            return ExecuteGetIdentityWithStrCon(DBConnection.connectionString, spName, out retValue, parametros);
+        }
+        public static DataSet ExecuteDataset(string spName, params object[] parametros)
+        {
+            int retValue;
+            SqlConnection conn = new SqlConnection(DBConnection.connectionString);
+            conn.Open();
+            DataSet ds = ExecuteQuery(conn, null, spName, out retValue, parametros);
+            conn.Close();
+            return ds;
+        }
+        public static int ExecuteNonQuery(string spName, out int retValue, params object[] parametros)
+        {
+            return ExecuteNonQueryWithStrCon(DBConnection.connectionString, spName, out retValue, parametros);
+        }
+        public static int ExecuteNonQueryWithStrCon(string stringDeConexion, string spName, out int retValue, params object[] parametros)
+        {
+            SqlConnection conn = new SqlConnection(stringDeConexion);
+            conn.Open();
+            int numRowAffected = 0;
+            numRowAffected = ExecuteNonQuery(conn, null, spName, out retValue, parametros);
+            conn.Close();
+            return numRowAffected;
+        }
+        public static int ExecuteNonQuery(string spName, params object[] parametros)
+        {
+            int retVal;
+            return ExecuteNonQuery(spName, out retVal, parametros);
+        }
+        public static int ExecuteNonQuery(SqlConnection conexion, SqlTransaction tran, string spName, out int retValue, params object[] parametros)
+        {
+            if (parametros != null && parametros.Length % 2 != 0)
+                throw new Exception("Los parametros deben de venir en paras");
+
+            SqlCommand comm = DBConnection.fillSqlCommand_Parameters(spName, parametros);
+            comm.Connection = conexion;
+            if (tran != null)
+                comm.Transaction = tran;
+
+            int numRowsAffected = comm.ExecuteNonQuery();
+            retValue = comm.Parameters["RetVal"].Value != null ? (int)comm.Parameters["RetVal"].Value : 0;
+            return numRowsAffected;
+
         }
 
-        public static void PreSelectDDL(object valueToSelect, DropDownList ddlObj)
+        public static object ExecuteScalar(string spName, out int retValue, params object[] parametros)
         {
-            int valueEnum = 0;
-            string valToSelect = valueToSelect.ToString();
-            if (ddlObj.SelectedItem != null)
-                ddlObj.SelectedItem.Selected = false;
-            if (valueToSelect.GetType().IsEnum)
+            if (parametros != null && parametros.Length % 2 != 0)
+                throw new Exception("Los parametros deben de venir en pares");
+            SqlConnection conn = new SqlConnection(DBConnection.connectionString);
+            SqlCommand comm = DBConnection.fillSqlCommand_Parameters(spName, parametros);
+
+            conn.Open();
+            comm.Connection = conn;
+            object objReturn = comm.ExecuteScalar();
+            conn.Close();
+
+            retValue = comm.Parameters["RetVal"].Value != null ? (int)comm.Parameters["RetVal"].Value : 0;
+            return objReturn;
+        }
+        public static object ExecuteScalar(String StrConnectionString, string strStoredProcedure, out int intRetValue, params object[] objParametros)
+        {
+            if (objParametros != null && objParametros.Length % 2 != 0) { throw new Exception("Los parametros deben de vebir en pares"); }
+            SqlConnection miSqlConnection = new SqlConnection(StrConnectionString);
+            SqlCommand miSqlCommand = DBConnection.fillSqlCommand_Parameters(strStoredProcedure, objParametros);
+
+            miSqlConnection.Open();
+
+            miSqlCommand.Connection = miSqlConnection;
+
+            Object objReturn = miSqlCommand.ExecuteScalar();
+
+            miSqlConnection.Close();
+
+            intRetValue = miSqlCommand.Parameters["RetVal"].Value != null ? (int)miSqlCommand.Parameters["RetVal"].Value : 0;
+
+            return objReturn;
+        }
+        private static SqlCommand fillSqlCommand_Parameters(String spName, params object[] parametros)
+        {
+            SqlCommand comm = new SqlCommand();
+            comm.CommandType = CommandType.StoredProcedure;
+            comm.CommandText = spName;
+
+            if (parametros != null)
             {
-                valueEnum = (int)valueToSelect;
-                valueToSelect = valueEnum.ToString();
-            }
-
-            if (!(ddlObj.Items.FindByValue(valueToSelect.ToString()) == null))
-                ddlObj.Items.FindByValue(valueToSelect.ToString()).Selected = true;
-        }
-
-        public static void FillDropDownListDT(DropDownList ddl, string valueField, string textField, DataTable DT)
-        {
-            int r = DT.Rows.Count;
-
-            for (int i = 0; i < r; i++)
-            {
-                string Text = DT.Rows[i][textField].ToString();
-                string Value = DT.Rows[i][valueField].ToString();
-
-                //ddl.Items.Insert(0,"i");                
-            }
-        }
-
-        public static void FillCheckBoxList(CheckBoxList chklst, string valueField, string textField, object datasource)
-        {
-            chklst.DataValueField = valueField;
-            chklst.DataTextField = textField;
-            chklst.DataSource = datasource;
-            chklst.DataBind();
-        }
-
-        public static void FillCheckBoxList(CheckBoxList chklstObj, string sValue, string sTexto, Object dsDatos, string sValuePre, string sTextoPre)
-        {
-            FillCheckBoxList(chklstObj, sValue, sTexto, dsDatos);
-            ListItem liAux = new ListItem();
-            liAux.Value = sValuePre;
-            liAux.Text = sTextoPre;
-            FillCheckBoxList(chklstObj, sValue, sTexto, dsDatos);
-            chklstObj.Items.Insert(0, liAux);
-        }
-
-        public static void SelectCHKLST(DataSet dsSelect, CheckBoxList chklstObj, string valueField)
-        {
-
-            if (dsSelect.Tables[0].Rows.Count != 0)
-            {
-                for (int i = 0; i < dsSelect.Tables[0].Rows.Count; i++)
+                for (int i = 0; i < parametros.Length; i = i + 2)
                 {
-
-                    chklstObj.Items.FindByValue(dsSelect.Tables[0].Rows[i][valueField].ToString()).Selected = true;
-
+                    comm.Parameters.AddWithValue(parametros[i].ToString(), parametros[i + 1]);
                 }
-
             }
+            SqlParameter retValue = new SqlParameter("RetVal", SqlDbType.Int);
+            retValue.Direction = ParameterDirection.ReturnValue;
+            comm.Parameters.Add(retValue);
 
-        }
-
-        public static void FillListBox(ListBox lst, string valueField, string textField, object datasource)
-        {
-            lst.DataValueField = valueField;
-            lst.DataTextField = textField;
-            lst.DataSource = datasource;
-            lst.DataBind();
-        }
-
-        public static void MsgBox(String ex, Page pg, Object obj)
-        {
-            string s = "<SCRIPT language='javascript'>alert('" + ex.Replace("\r\n", "\\n").Replace("'", "") + "'); </SCRIPT>";
-            Type cstype = obj.GetType();
-            ClientScriptManager cs = pg.ClientScript;
-            cs.RegisterClientScriptBlock(cstype, s, s.ToString());
-        }
-
-        public static void SweetBox(String ex, String sub, String type, Page pg, Object obj)
-        {
-            string s = "<SCRIPT language='javascript'>swal('" + ex.Replace("\r\n", "\\n").Replace("'", "") + "','" + sub.Replace("\r\n", "\\n").Replace("'", "") + "','" + type + "'); </SCRIPT>";
-            Type cstype = obj.GetType();
-            ClientScriptManager cs = pg.ClientScript;
-            cs.RegisterClientScriptBlock(cstype, s, s.ToString());
-        }
-
-        public static void SweetBoxConfirm(String ex, String sub, String type, string url, Page pg, Object obj)
-        {
-            string s = "<SCRIPT language='javascript'>";
-            s += "swal({title: '" + ex + "',text: '" + sub + "',type: '" + type + "',showCancelButton: false,confirmButtonColor: '#DD6B55', confirmButtonText: 'OK',closeOnConfirm: true},function(){document.location.href = '" + url + "';});</SCRIPT>";
-
-
-            Type cstype = obj.GetType();
-            ClientScriptManager cs = pg.ClientScript;
-            cs.RegisterClientScriptBlock(cstype, s, s.ToString());
-        }
-
-        public static void EnumToListBox(Type EnumType, ListControl TheListBox, bool ValorNumerico)
-        {
-            //Array Values = Enum.GetValues(EnumType);
-            //Recorremos el arreglo con todos los valores del enumerador
-            string Display = String.Empty;
-            DescriptionAttribute da;  //Es el tipo de variable que declaramos para hacer referencia a la descripcion del enumerador
-            int posicion = 1; //como cambiamos la variable de entero a enumerador, hay que llevar un "posicionador" que me de el valor del enumerador en caso de ser requerido
-            foreach (var value in Enum.GetValues(EnumType))
-            {
-                ListItem Item;
-                FieldInfo fi = value.GetType().
-                        GetField(value.ToString());
-                da = (DescriptionAttribute)Attribute.GetCustomAttribute(fi,
-                            typeof(DescriptionAttribute));
-                if (da != null)
-                    Display = da.Description;
-                else
-                    Display = value.ToString();
-
-                if (ValorNumerico) //El valor del ListBox será el Valor del Enumerador
-                { Item = new ListItem(Display, posicion.ToString()); }
-                else  //El Valor del ListBox será el mismo que se despliegue
-                { Item = new ListItem(Display, Display); }
-                TheListBox.Items.Add(Item);
-                posicion++;
-            }
-
-        }
-
-        public static string GetDescription(Enum currentEnum)
-        {
-            string description = String.Empty;
-            DescriptionAttribute da;
-
-            FieldInfo fi = currentEnum.GetType().
-                        GetField(currentEnum.ToString());
-            da = (DescriptionAttribute)Attribute.GetCustomAttribute(fi,
-                        typeof(DescriptionAttribute));
-            if (da != null)
-                description = da.Description;
-            else
-                description = currentEnum.ToString();
-
-            return description;
+            return comm;
         }
     }
-
 }
